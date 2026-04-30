@@ -10,9 +10,15 @@ import {
   BellOutlined,
   TeamOutlined,
   AppstoreOutlined,
+  BulbOutlined,
+  GlobalOutlined,
+  HistoryOutlined,
+  SafetyCertificateOutlined,
 } from '@ant-design/icons';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../core/providers/AuthProvider';
+import { useTheme } from '../core/providers/ThemeProvider';
+import { useTranslation } from 'react-i18next';
 import type { MenuProps } from 'antd';
 
 const { Header, Sider, Content, Footer } = Layout;
@@ -31,6 +37,16 @@ const menuItems: MenuProps['items'] = [
     label: 'Users',
   },
   {
+    key: '/roles',
+    icon: <SafetyCertificateOutlined />,
+    label: 'Roles',
+  },
+  {
+    key: '/audit-logs',
+    icon: <HistoryOutlined />,
+    label: 'Audit Log',
+  },
+  {
     type: 'divider',
   },
   {
@@ -44,6 +60,8 @@ const menuItems: MenuProps['items'] = [
 const MainLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const { user, logout } = useAuth();
+  const { mode, toggleTheme } = useTheme();
+  const { i18n } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -172,6 +190,27 @@ const MainLayout: React.FC = () => {
 
           {/* Right: notifications + avatar */}
           <Space size={16}>
+            <Tooltip title={`Switch to ${mode === 'dark' ? 'Light' : 'Dark'} Mode`}>
+              <Button
+                type="text"
+                icon={<BulbOutlined />}
+                onClick={toggleTheme}
+                style={{ color: '#94a3b8', fontSize: 18 }}
+              />
+            </Tooltip>
+
+            <Dropdown
+              menu={{
+                items: [
+                  { key: 'en', label: 'English', onClick: () => i18n.changeLanguage('en') },
+                  { key: 'ar', label: 'العربية', onClick: () => i18n.changeLanguage('ar') },
+                ],
+              }}
+              placement="bottomRight"
+            >
+              <Button type="text" icon={<GlobalOutlined />} style={{ color: '#94a3b8', fontSize: 18 }} />
+            </Dropdown>
+
             <Tooltip title="Notifications">
               <Badge count={3} size="small">
                 <Button

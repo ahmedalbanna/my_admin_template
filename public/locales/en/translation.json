@@ -1,0 +1,18 @@
+{
+  "dashboard": {
+    "title": "Dashboard Overview",
+    "welcome": "Welcome back! Here's what's happening with your platform.",
+    "totalUsers": "Total Users",
+    "activeUsers": "Active Users",
+    "newToday": "New Today",
+    "totalUploads": "Total Uploads"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "refresh": "Refresh",
+    "export": "Export"
+  }
+}

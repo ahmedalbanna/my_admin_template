@@ -1,4 +1,6 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 import { APP_CONFIG } from '../config/app.config';
 import type { ApiResponse } from '../types';
 
@@ -24,13 +26,17 @@ const apiClient: AxiosInstance = axios.create({
 // ─── Request Interceptor: Attach Bearer Token ─────────────────────────────────
 apiClient.interceptors.request.use(
   (config) => {
+    NProgress.start();
     const token = tokenStorage.getAccess();
     if (token && config.headers) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => Promise.reject(error),
+  (error) => {
+    NProgress.done();
+    return Promise.reject(error);
+  },
 );
 
 // ─── Response Interceptor: Refresh Token on 401 ───────────────────────────────
@@ -43,8 +49,12 @@ const processQueue = (error: unknown, token: string | null = null) => {
 };
 
 apiClient.interceptors.response.use(
-  (response: AxiosResponse) => response,
+  (response: AxiosResponse) => {
+    NProgress.done();
+    return response;
+  },
   async (error) => {
+    NProgress.done();
     const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean };
     const status = error.response?.status;
 

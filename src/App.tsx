@@ -1,9 +1,9 @@
 import React from 'react';
-import { ConfigProvider, App as AntApp } from 'antd';
+import { App as AntApp } from 'antd';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './core/providers/AuthProvider';
+import { ThemeProvider } from './core/providers/ThemeProvider';
 import { AppRouter } from './core/config/routes.config';
-import { adminTheme } from './core/theme/adminTheme';
 import './styles/global.css';
 
 // ─── React Query Client ───────────────────────────────────────────────────────
@@ -23,13 +23,13 @@ const queryClient = new QueryClient({
 // ─── Root App ─────────────────────────────────────────────────────────────────
 const App: React.FC = () => (
   <QueryClientProvider client={queryClient}>
-    <ConfigProvider theme={adminTheme}>
+    <ThemeProvider>
       <AntApp>
         <AuthProvider>
           <AppRouter />
         </AuthProvider>
       </AntApp>
-    </ConfigProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 

@@ -21,6 +21,7 @@ import FormModal from '../../../shared/FormModal/FormModal';
 import ConfirmDelete from '../../../shared/ConfirmDelete/ConfirmDelete';
 import { useUsersQuery, useUpdateUser, useDeleteUser } from '../hooks/useUsers';
 import { formatDateTime } from '../../../core/utils';
+import ExportButton from '../../../shared/ExportButton/ExportButton';
 import type { UserFilters } from '../types';
 
 const { Title, Text } = Typography;
@@ -93,14 +94,17 @@ const UsersListPage: React.FC = () => {
       title: 'Role',
       dataIndex: 'role',
       key: 'role',
-      render: (role: string) => (
-        <Tag
-          color={role === 'super_admin' ? 'purple' : role === 'admin' ? 'blue' : 'default'}
-          style={{ textTransform: 'capitalize', borderRadius: 6 }}
-        >
-          {role.replace('_', ' ')}
-        </Tag>
-      ),
+      render: (role: string) => {
+        const normalizedRole = role.toLowerCase();
+        return (
+          <Tag
+            color={normalizedRole === 'super_admin' ? 'purple' : normalizedRole === 'admin' ? 'blue' : 'default'}
+            style={{ textTransform: 'capitalize', borderRadius: 6 }}
+          >
+            {role.toLowerCase().replace('_', ' ')}
+          </Tag>
+        );
+      },
     },
     {
       title: 'Status',
@@ -186,13 +190,26 @@ const UsersListPage: React.FC = () => {
             </Select>
           </Col>
           <Col>
-            <Button
-              icon={<ReloadOutlined />}
-              onClick={() => refetch()}
-              style={{ borderColor: '#334155', color: '#94a3b8' }}
-            >
-              Refresh
-            </Button>
+            <Space>
+              <Button
+                icon={<ReloadOutlined />}
+                onClick={() => refetch()}
+                style={{ borderColor: '#334155', color: '#94a3b8' }}
+              >
+                Refresh
+              </Button>
+              <ExportButton 
+                data={users} 
+                filename="users_export" 
+                columns={[
+                  { title: 'First Name', dataIndex: 'firstName' }, 
+                  { title: 'Last Name', dataIndex: 'lastName' }, 
+                  { title: 'Email', dataIndex: 'email' }, 
+                  { title: 'Role', dataIndex: 'role' }, 
+                  { title: 'Status', dataIndex: 'isActive' }
+                ]} 
+              />
+            </Space>
           </Col>
         </Row>
       </Card>
